@@ -115,7 +115,7 @@ public class AboutDialog extends Dialog {
 
     Label wLogo = new Label(header, SWT.NONE);
     wLogo.setImage(
-        SwtSvgImageUtil.getImageAsResource(display, "ui/images/logo_hop.svg")
+        SwtSvgImageUtil.getImageAsResource(display, "ui/images/data_gear_logo.svg")
             .getAsBitmapForSize(display, 90, 90));
     wLogo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
@@ -128,7 +128,7 @@ public class AboutDialog extends Dialog {
     titleBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     Label wName = new Label(titleBox, SWT.LEFT);
-    wName.setText("Apache Hop");
+    wName.setText("Data Gear ETL Tool");
     wName.setFont(GuiResource.getInstance().getFontBold());
     wName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
     PropsUi.setLook(wName);

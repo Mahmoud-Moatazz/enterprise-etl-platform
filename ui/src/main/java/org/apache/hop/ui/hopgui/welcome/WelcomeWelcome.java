@@ -65,10 +65,10 @@ public class WelcomeWelcome {
     // No data to set on these widgets
   }
 
-  public static final String WEB_NAME_HOP_APACHE_ORG = "hop.apache.org";
-  public static final String WEB_LINK_HOP_APACHE_ORG = "https://hop.apache.org/";
+  public static final String WEB_NAME_HOP_APACHE_ORG = "datagearbi.com";
+  public static final String WEB_LINK_HOP_APACHE_ORG = "https://datagearbi.com/";
   public static final String WEB_NAME_GITHUB_STAR = "starring";
-  public static final String WEB_LINK_GITHUB_STAR = "https://github.com/apache/hop";
+  public static final String WEB_LINK_GITHUB_STAR = "";
 
   @GuiWidgetElement(
       id = "WelcomeWelcome.0900-github-star",
@@ -87,9 +87,9 @@ public class WelcomeWelcome {
       parentId = WELCOME_WELCOME_PARENT_ID,
       type = GuiElementType.LINK,
       label =
-          "Welcome to the Apache Hop project!\n\n"
-              + "The Hop Orchestration Platform, or Apache Hop, aims to facilitate all aspects of data and metadata orchestration.\n\n"
-              + "The Apache Hop website can be found at <a>"
+          "Welcome to the Data Gear ETL Tool!\n\n"
+              + "The Data Gear ETL Tool aims to facilitate all aspects of data and metadata orchestration.\n\n"
+              + "The Data Gear ETL Tool website can be found at <a>"
               + WEB_NAME_HOP_APACHE_ORG
               + "</a>.\n\nBelow are a few documentation links to get started:\n")
   public void homepageLink(Event event) {

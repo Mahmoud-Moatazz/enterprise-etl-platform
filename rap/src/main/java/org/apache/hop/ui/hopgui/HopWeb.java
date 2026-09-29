@@ -60,8 +60,8 @@ public class HopWeb implements ApplicationConfiguration {
 
   public static final String CONST_LIGHT = "light";
 
-  private static final String WEB_PAGE_TITLE = "Apache Hop Web";
-  private static final String RESOURCE_LOGO_ICON_PNG = "ui/images/logo_icon.png";
+  private static final String WEB_PAGE_TITLE = "Data Gear ETL Tool";
+  private static final String RESOURCE_LOGO_ICON_PNG = "ui/images/data_gear_logo.png";
 
   /**
    * Returns the browser page title for Hop Web, including the Apache Hop version when it is
@@ -145,7 +145,9 @@ public class HopWeb implements ApplicationConfiguration {
             // Convert svg to png without Display
             PNGTranscoder t = new PNGTranscoder();
             InputStream inputStream =
-                this.getClass().getClassLoader().getResourceAsStream("ui/images/logo_icon.svg");
+                this.getClass()
+                    .getClassLoader()
+                    .getResourceAsStream("ui/images/data_gear_logo.svg");
             TranscoderInput input = new TranscoderInput(inputStream);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             TranscoderOutput output = new TranscoderOutput(outputStream);
@@ -158,9 +160,9 @@ public class HopWeb implements ApplicationConfiguration {
           }
         });
     application.addResource(
-        "ui/images/logo_hop.svg",
+        "ui/images/data_gear_logo.svg",
         resourceName ->
-            HopWeb.class.getClassLoader().getResourceAsStream("ui/images/logo_hop.svg"));
+            HopWeb.class.getClassLoader().getResourceAsStream("ui/images/data_gear_logo.svg"));
     application.addServiceHandler(
         CanvasRenderServiceHandler.SERVICE_ID, new CanvasRenderServiceHandler());
 

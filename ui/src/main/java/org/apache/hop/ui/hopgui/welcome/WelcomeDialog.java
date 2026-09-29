@@ -71,7 +71,7 @@ public class WelcomeDialog {
     try {
       shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.CLOSE | SWT.RESIZE | SWT.MAX);
       shell.setLayout(new FormLayout());
-      shell.setText("Apache Hop");
+      shell.setText("Data Gear ETL Tool");
       shell.setImage(GuiResource.getInstance().getImageHop());
       PropsUi.setLook(shell);
 
@@ -81,7 +81,8 @@ public class WelcomeDialog {
       // Logo at the top left
       Label logoLabel = new Label(shell, SWT.NONE);
       SvgCacheEntry cacheEntry =
-          SvgCache.loadSvg(new SvgFile("ui/images/logo_hop.svg", getClass().getClassLoader()));
+          SvgCache.loadSvg(
+              new SvgFile("ui/images/data_gear_logo.svg", getClass().getClassLoader()));
       SwtUniversalImageSvg imageSvg =
           new SwtUniversalImageSvg(new SvgImage(cacheEntry.getSvgDocument()));
       int logoSize = (int) (75 * props.getZoomFactor());
@@ -89,10 +90,10 @@ public class WelcomeDialog {
       logoLabel.setImage(this.logoImage);
       logoLabel.setLayoutData(FormDataBuilder.builder().top().left().build());
 
-      // Apache Hop
+      // Data Gear ETL Tool
       Label welcome = new Label(shell, SWT.CENTER);
       PropsUi.setLook(welcome);
-      welcome.setText("Apache Hop");
+      welcome.setText("Data Gear ETL Tool");
       titleFont =
           new Font(shell.getDisplay(), "Open Sans", (int) (18 * props.getZoomFactor()), SWT.NONE);
       welcome.setFont(titleFont);
@@ -207,7 +208,7 @@ public class WelcomeDialog {
       type = GuiMenuElementType.MENU_ITEM,
       id = "help.welcome",
       label = "Welcome",
-      image = "ui/images/logo_hop.svg")
+      image = "ui/images/data_gear_logo.svg")
   public void menuHelpWelcome() {
     open();
   }

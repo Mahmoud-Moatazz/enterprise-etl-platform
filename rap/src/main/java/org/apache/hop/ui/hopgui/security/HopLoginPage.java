@@ -198,7 +198,10 @@ public final class HopLoginPage {
 
   public static byte[] loadLogoSvg() throws IOException {
     ClassLoader cl = HopLoginPage.class.getClassLoader();
-    for (String path : new String[] {"ui/images/logo_hop.svg", "ui/images/logo_icon.svg"}) {
+    for (String path :
+        new String[] {
+          "ui/images/data_gear_logo.svg", "ui/images/logo_hop.svg", "ui/images/logo_icon.svg"
+        }) {
       try (InputStream in = cl.getResourceAsStream(path)) {
         if (in != null) {
           return in.readAllBytes();

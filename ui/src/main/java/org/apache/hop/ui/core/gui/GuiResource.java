@@ -856,7 +856,7 @@ public class GuiResource {
 
     // Svg image
     //
-    imageLogo = SwtSvgImageUtil.getImageAsResource(display, "ui/images/logo_icon.svg");
+    imageLogo = SwtSvgImageUtil.getImageAsResource(display, "ui/images/data_gear_logo.svg");
     imagePipeline = SwtSvgImageUtil.getImageAsResource(display, "ui/images/pipeline.svg");
     imagePipelineDisabled =
         SwtSvgImageUtil.getImageAsResource(display, "ui/images/pipeline-disabled.svg");

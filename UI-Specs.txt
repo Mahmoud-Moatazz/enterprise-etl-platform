@@ -1,0 +1,274 @@
+Comprehensive UI Design System & Brand Specification Extraction
+This document provides an extraction of the design system, color tokens, typography rules, component styling, and brand assets from this repository (DGAI Hub / MLAAS.DGAIHUB), accompanied by concrete mapping and technical templates for Apache Hop Web (Eclipse RAP HTML/CSS).
+
+1. Color Palette & Tokens
+The application is built on a modern Azure Blue & Cool Slate palette. Below are the exact HEX, RGB, and functional tokens for both Light and Dark modes.
+
+1.1 The Azure Brand Scale
+Token	HEX	RGB	Role / Usage
+azure-50	#E3F2FD	rgb(227, 242, 253)	Subtle active backgrounds, hover fills, tint badges
+azure-100	#BBDEFB	rgb(187, 222, 251)	Light borders, ring accents
+azure-200	#90CAF9	rgb(144, 202, 249)	Subtle borders, light active indicators
+azure-300	#64B5F6	rgb(100, 181, 246)	Secondary brand highlights
+azure-400	#42A5F5	rgb(66, 165, 245)	Dark Mode Primary Brand Accent
+azure-500	#2196F3	rgb(33, 150, 243)	Interactive hover state, glowing pulse dots
+azure-600	#1E88E5	rgb(30, 136, 229)	Active nav icons, active link text
+azure-700	#1976D2	rgb(25, 118, 210)	Light Mode Primary Brand Color
+azure-800	#1565C0	rgb(21, 101, 192)	Deep brand text headers
+azure-900	#0D47A1	rgb(13, 71, 161)	Dark brand accents, heavy contrasts
+1.2 Neutral & Functional Colors (Light vs. Dark Mode)
+Semantic Role	Light Mode (HEX / RGB)	Dark Mode (HEX / RGB)
+Canvas Background (--background)	#FFFFFF (rgb(255, 255, 255))	#1F1F1F / #0F172A
+Foreground / Text Primary (--foreground)	#0F172A / #1E293B	#F8FAFC (rgb(248, 250, 252))
+Card / Surface Background (--card)	#FFFFFF (rgb(255, 255, 255))	#262626 / #1E293B
+Muted Background (--muted)	#F1F5F9 (rgb(241, 245, 249))	#334155 (rgb(51, 65, 85))
+Muted Text / Secondary (--muted-foreground)	#64748B (rgb(100, 116, 139))	#94A3B8 (rgb(148, 163, 184))
+Borders & Dividers (--border)	#E2E8F0 (rgb(226, 232, 240))	rgba(255, 255, 255, 0.10)
+Input Background (--input)	#FFFFFF (Borders: #E2E8F0)	rgba(255, 255, 255, 0.15)
+Destructive / Error (--destructive)	#EF4444 (rgb(239, 68, 68))	#F87171 (rgb(248, 113, 113))
+Success State	#10B981 (rgb(16, 185, 129))	#34D399 (rgb(52, 211, 153))
+Warning State	#F59E0B (rgb(245, 158, 11))	#FBBF24 (rgb(251, 191, 36))
+Focus / Active Ring (--ring)	#1976D2 (with rgba(25, 118, 210, 0.2))	#42A5F5 (with rgba(66, 165, 245, 0.25))
+2. Typography & Component Styling
+2.1 Typography Specs
+Font Family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif (System UI / Inter style clean sans-serif).
+Body / Standard UI: 13.5px – 14px (font-weight: 400 / 500, line-height: 1.5).
+Section Headers & Small Labels: 10px – 11px (font-weight: 700 or 800, letter-spacing: 0.12em to 0.15em, text-transform: uppercase, color: #94A3B8 or #64748B).
+Panel Titles: 15px – 16px (font-weight: 600 / 700, color: #1E293B).
+Page Titles: 20px – 24px (font-weight: 700).
+2.2 Component Specifications
+Buttons
+Border Radius: 8px (0.5rem / --radius-md).
+Primary: Background #1976D2, Text #FFFFFF, Shadow 0 4px 6px -1px rgba(25, 118, 210, 0.2). On Hover: Background #1565C0, Box Shadow 0 10px 15px -3px rgba(25, 118, 210, 0.25).
+Secondary: Background #F1F5F9, Border 1px solid #E2E8F0, Text #334155. On Hover: Background #E2E8F0.
+Destructive: Background #EF4444, Text #FFFFFF, Hover #DC2626.
+Outline: Background #FFFFFF, Border 1px solid #E2E8F0, Hover Background #F8FAFC, Hover Border #90CAF9.
+Sizes: Standard h-10 (40px), Small h-9 (36px), Large h-12 (48px).
+Input Fields & Controls
+Height: 40px (h-10).
+Padding: 8px 12px (px-3 py-2).
+Border: 1px solid #E2E8F0, Radius 8px.
+Focus: Border #1976D2, Outline none, Box Shadow 0 0 0 3px rgba(25, 118, 210, 0.20).
+Cards, Panels & Modals
+Card Radius: 12px – 16px (rounded-xl / rounded-2xl).
+Sidebar & Floating Headers: 24px (rounded-3xl) with backdrop blur (backdrop-filter: blur(16px)), background rgba(255, 255, 255, 0.85) and border 1px solid rgba(226, 232, 240, 0.80).
+Shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03).
+Dialogs: Backdrop overlay rgba(15, 23, 42, 0.5) with backdrop-filter: blur(4px). Dialog modal rounded 12px, border 1px solid #E2E8F0, padding 24px.
+Data Tables
+Header (th): Height 48px, Background #F8FAFC, Text #64748B, font-size 12px, font-weight: 600, Border-bottom 1px solid #E2E8F0.
+Row (tr): Border-bottom 1px solid #E2E8F0, transition background-color 0.15s ease.
+Row Hover: Background #F1F5F9 / rgba(227, 242, 253, 0.40).
+Cell (td): Padding 12px 16px, Text #1E293B, font-size 13.5px.
+Tabs & Navigation Bar
+Tab Bar Container: Background #F1F5F9, padding 4px, radius 8px.
+Tab Item: Text #64748B, font-weight 500, radius 6px.
+Active Tab Item: Background #FFFFFF, Text #0F172A, font-weight 600, Box Shadow 0 1px 3px 0 rgba(0, 0, 0, 0.1).
+Sidebar Nav Active Item: Background #F8FAFC, Text #1976D2, Border 1px solid rgba(187, 222, 251, 0.5), with a 3px solid #2196F3 vertical pill indicator on the left edge.
+3. Visual Assets & Icons
+3.1 Repository Asset Files
+Primary Brand Logo: 
+
+logo.png
+Location: /public/images/logo.png
+Export Guidance: High-resolution DataGear / DGAI Hub logo. Copy this PNG or export as a clean vector SVG for the Hop Web navigation banner / login screen.
+3.2 Icon System
+The application uses Lucide Icons with thin-to-medium stroke (stroke-width: 1.75 - 2px):
+
+Core Nav Icons: LayoutDashboard, Database (SQL Lab), Box (Component Builder), Workflow (Pipelines), Play (Pipeline Runner), History (Audit), Zap (Inference), Building2 (Tenant/Workspace), Settings2 (Admin/Config).
+Control Icons: ChevronDown, ChevronLeft, ChevronRight, Check, LogOut, Bell, LayoutGrid.
+Hop Web Transfer Recommendation: Export SVG versions of these standard 20x20 / 24x24 icons into Hop's Web theme asset directory.
+4. Hop Web (Eclipse RAP) Target Customization Specs
+Eclipse RAP in Apache Hop renders UI components using HTML elements wrapped inside specific RAP/RWT CSS selector classes or custom CSS skins.
+
+4.1 Consolidated Theme CSS (dgai-hop-theme.css)
+css
+/* ==========================================================================
+   DGAI Hub / Hop Web Design System Theme
+   ========================================================================== */
+:root {
+  /* Azure Palette */
+  --dgai-azure-50: #E3F2FD;
+  --dgai-azure-100: #BBDEFB;
+  --dgai-azure-200: #90CAF9;
+  --dgai-azure-300: #64B5F6;
+  --dgai-azure-400: #42A5F5;
+  --dgai-azure-500: #2196F3;
+  --dgai-azure-600: #1E88E5;
+  --dgai-azure-700: #1976D2;
+  --dgai-azure-800: #1565C0;
+  --dgai-azure-900: #0D47A1;
+  /* Neutrals (Light Mode) */
+  --dgai-bg: #FFFFFF;
+  --dgai-surface: #FFFFFF;
+  --dgai-surface-muted: #F8FAFC;
+  --dgai-border: #E2E8F0;
+  --dgai-border-subtle: #F1F5F9;
+  --dgai-text-primary: #0F172A;
+  --dgai-text-secondary: #64748B;
+  --dgai-text-muted: #94A3B8;
+  /* States */
+  --dgai-primary: #1976D2;
+  --dgai-primary-hover: #1565C0;
+  --dgai-primary-fg: #FFFFFF;
+  --dgai-destructive: #EF4444;
+  --dgai-destructive-hover: #DC2626;
+  --dgai-success: #10B981;
+  --dgai-focus-ring: rgba(25, 118, 210, 0.25);
+  /* Geometry & Elevation */
+  --dgai-radius-sm: 4px;
+  --dgai-radius-md: 8px;
+  --dgai-radius-lg: 12px;
+  --dgai-radius-xl: 16px;
+  --dgai-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --dgai-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --dgai-shadow-lg: 0 10px 20px -3px rgba(33, 150, 243, 0.10);
+}
+/* ==========================================================================
+   Eclipse RAP / Apache Hop Web Target Mappings
+   ========================================================================== */
+/* 1. Global Shell & Canvas */
+Shell, 
+.hop-shell {
+  background-color: var(--dgai-surface-muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: var(--dgai-text-primary);
+}
+/* 2. Header & Main Toolbar */
+.hop-header,
+ToolBar[MAIN] {
+  background: var(--dgai-surface);
+  border-bottom: 1px solid var(--dgai-border);
+  height: 54px;
+  box-shadow: var(--dgai-shadow-sm);
+}
+/* 3. Pipeline / Workflow Designer Canvas Background */
+.hop-canvas,
+.hop-workflow-canvas {
+  background-color: #FAFAFA;
+  background-image: radial-gradient(var(--dgai-border) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+/* 4. Sidebar & Trees (Explorer, Transforms, Actions) */
+Tree, 
+.hop-sidebar {
+  background-color: var(--dgai-surface);
+  border-right: 1px solid var(--dgai-border);
+  color: var(--dgai-text-primary);
+  font-size: 13.5px;
+}
+TreeItem:selected,
+Tree-Row:selected {
+  background-color: var(--dgai-azure-50);
+  color: var(--dgai-azure-800);
+  border-left: 3px solid var(--dgai-azure-700);
+  font-weight: 600;
+}
+TreeItem:hover,
+Tree-Row:hover {
+  background-color: var(--dgai-surface-muted);
+}
+/* 5. CTabFolder / Editor Tabs */
+CTabFolder {
+  border-color: var(--dgai-border);
+  background-color: var(--dgai-surface-muted);
+}
+CTabItem {
+  background-color: transparent;
+  color: var(--dgai-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+}
+CTabItem:selected {
+  background-color: var(--dgai-surface);
+  color: var(--dgai-text-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--dgai-azure-700);
+}
+/* 6. Buttons (Eclipse RAP Button widget styles) */
+Button[PUSH] {
+  background-color: var(--dgai-primary);
+  color: var(--dgai-primary-fg);
+  border: none;
+  border-radius: var(--dgai-radius-md);
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: var(--dgai-shadow-sm);
+}
+Button[PUSH]:hover {
+  background-color: var(--dgai-primary-hover);
+  box-shadow: var(--dgai-shadow-md);
+}
+Button[PUSH]:focus {
+  outline: 2px solid var(--dgai-focus-ring);
+}
+Button[FLAT], 
+Button[SECONDARY] {
+  background-color: var(--dgai-surface-muted);
+  color: var(--dgai-text-primary);
+  border: 1px solid var(--dgai-border);
+}
+Button[FLAT]:hover {
+  background-color: var(--dgai-border);
+}
+/* 7. Input Fields & Text Areas */
+Text, 
+Text[MULTI], 
+Combo {
+  background-color: var(--dgai-surface);
+  border: 1px solid var(--dgai-border);
+  border-radius: var(--dgai-radius-md);
+  color: var(--dgai-text-primary);
+  padding: 6px 10px;
+  font-size: 13.5px;
+}
+Text:focus, 
+Combo:focus {
+  border-color: var(--dgai-azure-700);
+  outline: 3px solid var(--dgai-focus-ring);
+}
+/* 8. Table & Grids (Logs, Execution Metrics, Preview) */
+Table {
+  border: 1px solid var(--dgai-border);
+  background-color: var(--dgai-surface);
+  font-size: 13px;
+}
+TableColumn {
+  background-color: var(--dgai-surface-muted);
+  color: var(--dgai-text-secondary);
+  font-weight: 600;
+  font-size: 11.5px;
+  border-bottom: 1px solid var(--dgai-border);
+  padding: 8px 12px;
+}
+TableItem:hover {
+  background-color: var(--dgai-azure-50);
+}
+TableItem:selected {
+  background-color: var(--dgai-azure-100);
+  color: var(--dgai-azure-900);
+}
+/* 9. Dialog Shells & Popups */
+Shell[DIALOG_TRIM] {
+  background-color: var(--dgai-surface);
+  border-radius: var(--dgai-radius-lg);
+  box-shadow: var(--dgai-shadow-lg);
+}
+5. Step-by-Step Technical Checklist for Mirroring into Apache Hop Web
+Follow these steps to apply this design system directly into your Apache Hop Web deployment:
+
+Locate Hop Theme Bundle:
+In your Hop Web deployment/RAP installation directory (usually under plugins/org.apache.hop.web... or your custom RAP branding bundle), locate the active CSS theme (often theme/theme.css or branding/theme.css).
+Copy Visual Brand Assets:
+Transfer public/images/logo.png to Hop Web's image directory (/images/logo.png or branding/logo.png).
+Configure Hop Web's branding.properties to set branding.logo=images/logo.png and update the page title to match.
+Inject CSS Variables & Rules:
+Prepend the :root token variables and RAP selector rules from Section 4.1 into your Hop Web theme stylesheet.
+Customize Canvas Grid & Node Selection:
+Ensure the pipeline canvas background uses the 20px dot grid pattern with #E2E8F0 dots on a #FAFAFA background.
+Set transform/action active border selection to #1976D2 with a 3px glow ring.
+Adjust Tab & Sidebar Accents:
+Verify that active pipeline tabs use the #1976D2 bottom border indicator and that sidebar tree items display the #E3F2FD hover and #1976D2 active border markers.
+Deploy & Validate:
+Rebuild/restart the Hop Web container or refresh the RAP theme bundle cache to verify button states, tab switching, and table metrics styling against this reference.
