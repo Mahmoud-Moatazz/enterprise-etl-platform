@@ -18,27 +18,24 @@
 package org.apache.hop.core.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.hop.core.Const;
-import org.apache.hop.core.json.HopJson;
 import org.apache.hop.core.logging.LogChannel;
-import org.apache.hop.core.vfs.HopVfs;
+import org.apache.hop.core.security.repository.IHopUserRepository;
+import org.apache.hop.core.security.repository.JsonFileHopUserRepository;
 
 /**
- * File-backed user store for Hop-managed BASIC authentication. Users are stored under {@code
- * HOP_CONFIG_FOLDER/security/users.json} with one-way password hashes.
+ * Domain service for Hop-managed authentication and user management.
+ *
+ * <p>Authentication, password hashing, and role expansion are orchestrated here, while persistence
+ * is delegated to an active {@link IHopUserRepository} (defaulting to {@link
+ * JsonFileHopUserRepository}).
  *
  * <p>Bootstrap: when the store is empty and {@code HOP_WEB_ADMIN_USER} / {@code
  * HOP_WEB_ADMIN_PASSWORD} are set (or defaults for local dev when mode is BASIC), a first admin
@@ -54,12 +51,18 @@ public final class HopUserStore {
   private static final Object LOCK = new Object();
   private static volatile HopUserStore instance;
 
-  private final List<HopUser> users = new CopyOnWriteArrayList<>();
+  private IHopUserRepository repository;
 
-  private HopUserStore() {}
+  private HopUserStore() {
+    this(new JsonFileHopUserRepository());
+  }
+
+  private HopUserStore(IHopUserRepository repository) {
+    this.repository = (repository != null) ? repository : new JsonFileHopUserRepository();
+  }
 
   /**
-   * @return singleton user store (loaded from disk on first access)
+   * @return singleton user store (loaded from repository on first access)
    */
   public static HopUserStore getInstance() {
     HopUserStore local = instance;
@@ -76,11 +79,35 @@ public final class HopUserStore {
     }
   }
 
-  /** Reset singleton (tests). */
+  /** Reset singleton (tests and lifecycle reset). */
   public static void reset() {
     synchronized (LOCK) {
       instance = null;
     }
+  }
+
+  /**
+   * Inject or change the active user repository (e.g. switching to database mode during startup).
+   *
+   * @param repository the user repository to use
+   */
+  public void setRepository(IHopUserRepository repository) {
+    if (repository == null) {
+      throw new IllegalArgumentException("repository cannot be null");
+    }
+    synchronized (LOCK) {
+      // Initialize/reload repository before switching the reference.
+      // If reload fails (e.g. storage error or corrupted file), the reference is NOT switched.
+      repository.reload();
+      this.repository = repository;
+    }
+  }
+
+  /**
+   * @return the active user repository
+   */
+  public IHopUserRepository getRepository() {
+    return repository;
   }
 
   public static String getUsersFilePath() {
@@ -91,33 +118,23 @@ public final class HopUserStore {
         + USERS_FILENAME;
   }
 
-  /** Reload users from disk into memory. */
+  /** Reload users from persistent storage into memory. */
   public void reload() {
     synchronized (LOCK) {
-      users.clear();
-      users.addAll(readFromFile());
+      repository.reload();
     }
   }
 
   public List<HopUser> listUsers() {
-    return List.copyOf(users);
+    return repository.listUsers();
   }
 
   public boolean isEmpty() {
-    return users.isEmpty();
+    return repository.isEmpty();
   }
 
   public Optional<HopUser> findUser(String username) {
-    if (username == null || username.isBlank()) {
-      return Optional.empty();
-    }
-    String key = username.trim();
-    for (HopUser user : users) {
-      if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(key)) {
-        return Optional.of(user);
-      }
-    }
-    return Optional.empty();
+    return repository.findByUsername(username);
   }
 
   /**
@@ -150,15 +167,7 @@ public final class HopUserStore {
    */
   public void replaceAllUsers(List<HopUser> newUsers) {
     synchronized (LOCK) {
-      users.clear();
-      if (newUsers != null) {
-        for (HopUser user : newUsers) {
-          if (user != null && user.getUsername() != null && !user.getUsername().isBlank()) {
-            users.add(user);
-          }
-        }
-      }
-      writeToFile();
+      repository.replaceAllUsers(newUsers);
     }
   }
 
@@ -182,16 +191,9 @@ public final class HopUserStore {
     List<String> roleList = normalizeRoles(roles);
 
     synchronized (LOCK) {
-      HopUser existing = findUser(name).orElse(null);
-      if (existing != null) {
-        existing.setPasswordHash(hash);
-        existing.setRoles(roleList);
-        existing.setEnabled(true);
-      } else {
-        users.add(new HopUser(name, hash, roleList));
-      }
-      writeToFile();
-      return findUser(name).orElseThrow();
+      HopUser user = new HopUser(name, hash, roleList);
+      user.setEnabled(true);
+      return repository.saveUser(user);
     }
   }
 
@@ -342,49 +344,6 @@ public final class HopUserStore {
     return result;
   }
 
-  private static List<HopUser> readFromFile() {
-    String path = getUsersFilePath();
-    try {
-      if (!HopVfs.fileExists(path)) {
-        return new ArrayList<>();
-      }
-      try (InputStream in = HopVfs.getInputStream(path)) {
-        ObjectMapper mapper = HopJson.newMapper();
-        UsersFile file = mapper.readValue(in, UsersFile.class);
-        if (file == null || file.getUsers() == null) {
-          return new ArrayList<>();
-        }
-        return new ArrayList<>(file.getUsers());
-      }
-    } catch (Exception e) {
-      safeLogError("Unable to read Hop users file '" + path + "', starting with empty store", e);
-      return new ArrayList<>();
-    }
-  }
-
-  private void writeToFile() {
-    String path = getUsersFilePath();
-    try {
-      String folder =
-          Const.HOP_CONFIG_FOLDER + Const.FILE_SEPARATOR + HopSecurityConfig.SECURITY_FOLDER;
-      var folderObject = HopVfs.getFileObject(folder);
-      if (!folderObject.exists()) {
-        folderObject.createFolder();
-      }
-      UsersFile file = new UsersFile();
-      file.setUsers(new ArrayList<>(users));
-      ObjectMapper mapper = HopJson.newMapper();
-      mapper.enable(SerializationFeature.INDENT_OUTPUT);
-      byte[] json = mapper.writeValueAsString(file).getBytes(StandardCharsets.UTF_8);
-      try (OutputStream out = HopVfs.getOutputStream(path, false)) {
-        out.write(json);
-      }
-      safeLogBasic("Saved Hop users file to '" + path + "' (" + users.size() + " users)");
-    } catch (Exception e) {
-      safeLogError("Unable to save Hop users file to '" + path + "'", e);
-    }
-  }
-
   private static void safeLogBasic(String message) {
     try {
       LogChannel.GENERAL.logBasic(message);
@@ -415,6 +374,7 @@ public final class HopUserStore {
     return null;
   }
 
+  /** Retained for backward compatibility with existing callers. */
   @Getter
   @Setter
   @JsonIgnoreProperties(ignoreUnknown = true)

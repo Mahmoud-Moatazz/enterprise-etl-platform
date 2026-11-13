@@ -63,6 +63,12 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>10.1.61</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
